@@ -64,10 +64,8 @@ class Bird extends SpriteGroupComponent<BirdMove>
 
     game.pauseEngine();
     game.isHit = false;
-    Future.delayed(const Duration(seconds: 1), () {
-      FlameAudio.play(Assets.gameout);
-      game.overlays.add('gameOver');
-    });
+
+    game.overlays.add('gameOver');
   }
 
   @override
