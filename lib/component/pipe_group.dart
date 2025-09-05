@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flappy_birds/component/pipe.dart';
+import 'package:flappy_birds/game/assets.dart';
 import 'package:flappy_birds/game/configuration.dart';
 import 'package:flappy_birds/game/flappy_bird_game.dart';
 import 'package:flappy_birds/game/pipe_position.dart';
@@ -11,6 +13,7 @@ class PipeGroup extends PositionComponent
   PipeGroup();
 
   final _random = Random();
+  bool _scored = false;
 
   @override
   Future<void> onLoad() async {
@@ -34,9 +37,14 @@ class PipeGroup extends PositionComponent
   void update(double dt) {
     super.update(dt);
     position.x -= Configuration.gameSpeed * dt;
-    if (game.isHit) {
-      removeFromParent();
-      game.isHit = false;
+    if (game.isHit) return;
+
+    final topPipe = children.whereType<Pipe>().first;
+
+    if (!_scored && (position.x + topPipe.x + topPipe.width) < game.bird.x) {
+      game.bird.score += 1;
+      _scored = true;
+      FlameAudio.play(Assets.point);
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flappy_birds/component/pipe_group.dart';
 import 'package:flappy_birds/game/assets.dart';
 import 'package:flappy_birds/game/bird_move.dart';
@@ -11,6 +12,8 @@ import 'package:flutter/material.dart';
 class Bird extends SpriteGroupComponent<BirdMove>
     with HasGameReference<FlappyBirdGame>, CollisionCallbacks {
   Bird();
+
+  int score = 0;
 
   @override
   Future<void> onLoad() async {
@@ -38,6 +41,7 @@ class Bird extends SpriteGroupComponent<BirdMove>
       ),
     );
     current = BirdMove.up;
+    FlameAudio.play(Assets.flying);
   }
 
   @override
@@ -49,15 +53,21 @@ class Bird extends SpriteGroupComponent<BirdMove>
   //reset
   void reset() {
     position = Vector2(50, game.size.y / 2 - size.y / 2);
+    score = 0;
     game.children.whereType<PipeGroup>().forEach((pipe) {
       pipe.removeFromParent();
     });
   }
 
   void gameOver() {
-    game.overlays.add('gameOver');
+    FlameAudio.play(Assets.hit);
+
     game.pauseEngine();
-    game.isHit = true;
+    game.isHit = false;
+    Future.delayed(const Duration(seconds: 1), () {
+      FlameAudio.play(Assets.gameout);
+      game.overlays.add('gameOver');
+    });
   }
 
   @override

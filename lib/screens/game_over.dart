@@ -19,6 +19,17 @@ class GameOver extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(Assets.gameOver),
+            SizedBox(height: 40),
+            Text(
+              "Your Score: ${game.bird.score}",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 50,
+                color: Colors.white,
+                fontFamily: 'Game',
+                shadows: [Shadow(color: Colors.orange, offset: Offset(2, 3))],
+              ),
+            ),
             SizedBox(height: 80),
             GestureDetector(
               onTap: onRestart,
