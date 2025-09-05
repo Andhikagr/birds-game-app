@@ -15,4 +15,5 @@ class Assets {
   static const hit = 'collision.wav';
   static const point = 'point.mp3';
   static const gameout = 'game-over.mp3';
+  static const birdsvoice = 'birds.mp3';
 }
